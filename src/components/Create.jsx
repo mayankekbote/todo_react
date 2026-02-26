@@ -1,37 +1,47 @@
 import { nanoid } from "nanoid";
+import { useForm } from "react-hook-form";
 
-const Create = (props) => {
-  const todos = props.todos;
-  const setTodos = props.setTodos;
-  const title = props.title;
-  const setTitle = props.setTitle;
+const Create = ({ todos, setTodos }) => {
+  const {
+    register,
+    reset,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
 
-  const submitHandler = (e) => {
-    e.preventDefault();
+  const submitHandler = (data) => {
     const newTodo = {
       id: nanoid(),
-      title: title
+      title: data.title,
     };
+
     setTodos([...todos, newTodo]);
-    setTitle("");
+    reset();
   };
 
   return (
     <form
-      onSubmit={submitHandler}
+      onSubmit={handleSubmit(submitHandler)}
       className="bg-zinc-900 p-6 rounded-2xl shadow-xl border border-zinc-800 w-full max-w-md"
     >
       <input
+        {...register("title", {
+          required: "Title is required",
+          minLength: {
+            value: 3,
+            message: "Minimum 3 characters required",
+          },
+        })}
         type="text"
         placeholder="Enter Title"
-        onChange={(e) => setTitle(e.target.value)}
-        value={title}
         className="w-full px-4 py-3 bg-black text-white border border-zinc-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 transition"
       />
 
-      <button
-        className="mt-4 w-full py-3 bg-orange-500 hover:bg-orange-600 text-white font-semibold rounded-xl transition duration-300"
-      >
+      {errors.title ? (
+        <p className="text-red-500 text-sm mt-2">{errors.title.message}</p>
+      ) : null}
+
+      <button className="mt-4 w-full py-3 bg-orange-500 hover:bg-orange-600 text-white font-semibold rounded-xl transition duration-300">
         Create Todo
       </button>
     </form>
