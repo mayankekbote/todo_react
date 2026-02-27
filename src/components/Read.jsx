@@ -1,11 +1,15 @@
+import { useContext } from "react";
+import { todoContext } from "../Wrapper";
+import { toast } from "react-toastify";
 
-const Read = (props) => {
-  const todos = props.todos;
-  const setTodos = props.setTodos;
+const Read = () => {
+  
+  const [todos,setTodos]= useContext(todoContext)
 
   const renderTodos = todos.map((todo) => {
     const deleteHandler = (id) => {
       const filteredTodos = todos.filter((todo) => todo.id != id);
+      toast.error("Todo Deleted")
       setTodos(filteredTodos);
     };
 
@@ -27,7 +31,7 @@ const Read = (props) => {
   });
 
   return (
-    <div className="mt-4 w-full max-w-md">
+    <div className="py-1 w-full max-w-md">
       <h1 className="text-xl font-bold text-center text-white mb-4 tracking-wide">
         Your Todos
       </h1>

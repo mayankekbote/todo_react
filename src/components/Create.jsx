@@ -1,7 +1,12 @@
 import { nanoid } from "nanoid";
 import { useForm } from "react-hook-form";
+import { todoContext } from "../Wrapper";
+import { useContext } from "react";
+import { toast } from "react-toastify";
+const Create = () => {
 
-const Create = ({ todos, setTodos }) => {
+  const [todos,setTodos]= useContext(todoContext)
+
   const {
     register,
     reset,
@@ -14,8 +19,8 @@ const Create = ({ todos, setTodos }) => {
       id: nanoid(),
       title: data.title,
     };
-
     setTodos([...todos, newTodo]);
+    toast.success("Todo Created")
     reset();
   };
 
